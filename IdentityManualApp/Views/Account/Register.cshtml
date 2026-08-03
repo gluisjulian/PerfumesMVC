@@ -1,0 +1,40 @@
+@model RegisterViewModel
+@{
+    ViewData["Title"] = "Cadastrar";
+}
+
+<div class="form-container">
+    <h1>Criar conta</h1>
+
+    <form asp-controller="Account" asp-action="Register" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+        <div class="form-group">
+            <label asp-for="NomeCompleto"></label>
+            <input asp-for="NomeCompleto" />
+            <span asp-validation-for="NomeCompleto" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Senha"></label>
+            <input asp-for="Senha" type="password" />
+            <span asp-validation-for="Senha" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="ConfirmarSenha"></label>
+            <input asp-for="ConfirmarSenha" type="password" />
+            <span asp-validation-for="ConfirmarSenha" class="text-danger"></span>
+        </div>
+
+        <button type="submit" class="btn">Cadastrar</button>
+    </form>
+
+    <p style="margin-top:1rem">Já tem conta? <a asp-controller="Account" asp-action="Login">Entrar</a></p>
+</div>

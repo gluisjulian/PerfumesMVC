@@ -1,0 +1,16 @@
+@{
+    ViewData["Title"] = "Início";
+}
+
+<h1>Bem-vindo ao IdentityManualApp</h1>
+
+@if (User.Identity != null && User.Identity.IsAuthenticated)
+{
+    <p>Você está autenticado como <strong>@User.Identity.Name</strong>.</p>
+}
+else
+{
+    <p>Faça <a asp-controller="Account" asp-action="Login">login</a> ou <a asp-controller="Account" asp-action="Register">cadastre-se</a> para gerenciar produtos.</p>
+}
+
+<p>O catálogo de <a asp-controller="Fornecedor" asp-action="Index">fornecedores</a> é público, mas o gerenciamento de <a asp-controller="Produto" asp-action="Index">produtos</a> exige login.</p>

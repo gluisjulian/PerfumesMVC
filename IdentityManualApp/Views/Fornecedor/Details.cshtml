@@ -1,0 +1,16 @@
+@model Fornecedor
+@{
+    ViewData["Title"] = "Detalhes do fornecedor";
+}
+
+<h1>@Model.Nome</h1>
+
+<dl>
+    <dt>CNPJ</dt><dd>@Model.Cnpj</dd>
+    <dt>Telefone</dt><dd>@Model.Telefone</dd>
+    <dt>E-mail</dt><dd>@Model.Email</dd>
+    <dt>Endereço</dt><dd>@Model.Endereco</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn">Editar</a>
+<a asp-action="Index" class="btn" style="background:#6b7280">Voltar</a>

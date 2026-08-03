@@ -1,0 +1,35 @@
+@model LoginViewModel
+@{
+    ViewData["Title"] = "Entrar";
+}
+
+<div class="form-container">
+    <h1>Entrar</h1>
+
+    <form asp-controller="Account" asp-action="Login" method="post">
+        <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+        <input type="hidden" asp-for="ReturnUrl" />
+
+        <div class="form-group">
+            <label asp-for="Email"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Senha"></label>
+            <input asp-for="Senha" type="password" />
+            <span asp-validation-for="Senha" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
+            <label>
+                <input asp-for="LembrarMe" style="width:auto" /> @Html.DisplayNameFor(m => m.LembrarMe)
+            </label>
+        </div>
+
+        <button type="submit" class="btn">Entrar</button>
+    </form>
+
+    <p style="margin-top:1rem">Não tem conta? <a asp-controller="Account" asp-action="Register">Cadastre-se</a></p>
+</div>
