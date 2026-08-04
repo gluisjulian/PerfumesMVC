@@ -28,6 +28,10 @@ namespace IdentityManualApp.Models
         [Display(Name = "Endereço")]
         public string? Endereco { get; set; }
 
+        [StringLength(500)]
+        [Display(Name = "Descrição")]
+        public string? Descricao { get; set; }
+
         public string? UsuarioId { get; set; }
 
         // Navegação: um fornecedor pode ter vários produtos.

@@ -57,7 +57,7 @@ namespace IdentityManualApp.Controllers
         // POST: Fornecedor/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nome,Cnpj,Telefone,Email,Endereco")] Fornecedor fornecedor)
+        public async Task<IActionResult> Create([Bind("Nome,Cnpj,Telefone,Email,Endereco,Descricao")] Fornecedor fornecedor)
         {
             if (!ModelState.IsValid) return View(fornecedor);
 
@@ -82,10 +82,12 @@ namespace IdentityManualApp.Controllers
         // POST: Fornecedor/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cnpj,Telefone,Email,Endereco")] Fornecedor fornecedor)
+        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Cnpj,Telefone,Email,Endereco,Descricao")] Fornecedor fornecedor)
         {
             if (id != fornecedor.Id) return NotFound();
             if (!ModelState.IsValid) return View(fornecedor);
+
+            fornecedor.UsuarioId = ObterUsuario();
 
             try
             {

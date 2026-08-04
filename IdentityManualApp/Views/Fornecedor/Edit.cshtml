@@ -38,6 +38,11 @@
             <input asp-for="Endereco" />
         </div>
 
+        <div class="form-group">
+            <label asp-for="Descricao"></label>
+            <textarea asp-for="Descricao" rows="10"></textarea>
+        </div>
+
         <button type="submit" class="btn">Salvar</button>
         <a asp-action="Index" class="btn" style="background:#6b7280">Cancelar</a>
     </form>
