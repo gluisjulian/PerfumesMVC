@@ -33,6 +33,12 @@
         </div>
 
         <div class="form-group">
+            <label asp-for="UnidadeMedida"></label>
+            <input asp-for="UnidadeMedida" />
+            <span asp-validation-for="UnidadeMedida" class="text-danger"></span>
+        </div>
+
+        <div class="form-group">
             <label asp-for="FornecedorId"></label>
             <select asp-for="FornecedorId" asp-items="ViewBag.FornecedorId">
                 <option value="">-- Selecione --</option>

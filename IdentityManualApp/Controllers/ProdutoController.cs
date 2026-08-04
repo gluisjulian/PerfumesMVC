@@ -66,7 +66,7 @@ namespace IdentityManualApp.Controllers
         // POST: Produto/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nome,Descricao,Preco,Quantidade,FornecedorId")] Produto produto)
+        public async Task<IActionResult> Create([Bind("Nome,Descricao,Preco,Quantidade,UnidadeMedida,FornecedorId")] Produto produto)
         {
             if (!ModelState.IsValid)
             {

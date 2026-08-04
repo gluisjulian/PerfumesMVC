@@ -23,9 +23,14 @@ namespace IdentityManualApp.Models
         public decimal Preco { get; set; }
 
         [Required(ErrorMessage = "A quantidade é obrigatória.")]
-        [Range(0, int.MaxValue, ErrorMessage = "Informe uma quantidade válida.")]
-        [Display(Name = "Quantidade em estoque")]
-        public int Quantidade { get; set; }
+        [Column(TypeName = "decimal(10,3)")]
+        [Range(0, 999999.999, ErrorMessage = "Informe a quantidade.")]
+        public decimal Quantidade { get; set; }
+
+        [StringLength(2)]
+        [Required(ErrorMessage = "A Unidade de medida é obrigatório.")]
+        [Display(Name = "Unidade de Medida")]
+        public string UnidadeMedida { get; set; }
 
         [Required(ErrorMessage = "Selecione um fornecedor.")]
         [Display(Name = "Fornecedor")]
