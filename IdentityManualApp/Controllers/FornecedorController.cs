@@ -61,6 +61,8 @@ namespace IdentityManualApp.Controllers
         {
             if (!ModelState.IsValid) return View(fornecedor);
 
+            fornecedor.UsuarioId = ObterUsuario();
+
             _context.Add(fornecedor);
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));

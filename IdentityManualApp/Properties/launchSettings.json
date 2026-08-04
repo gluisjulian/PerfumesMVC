@@ -1,6 +1,6 @@
 {
   "profiles": {
-    "IdentityManualApp": {
+    "PerfumesMVC": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
