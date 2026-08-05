@@ -1,5 +1,6 @@
 ﻿using IdentityManualApp.Data;
 using IdentityManualApp.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -9,6 +10,7 @@ using PerfumesMVC.ViewModels.Receita;
 
 namespace PerfumesMVC.Controllers
 {
+    [Authorize]
     public class ReceitaController : Controller
     {
         private readonly ApplicationDbContext _context;
@@ -63,8 +65,10 @@ namespace PerfumesMVC.Controllers
             {
                 ProdutoId = x.Id,
                 NomeProduto = x.Nome,
-                UnidadeMedida = x.UnidadeMedida
-            }).ToList();
+                UnidadeMedida = x.UnidadeMedida,
+                UsuarioId = x.UsuarioId
+            }).Where(x => x.UsuarioId == ObterUsuario())           
+            .ToList();
 
 
             var model = new ReceitaCreateViewModel
@@ -111,37 +115,67 @@ namespace PerfumesMVC.Controllers
 
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null) return NotFound();
+            var receita = await _context.Receitas
+            .Include(r => r.ReceitaProdutos)
+            .ThenInclude(rp => rp.Produto)
+            .FirstOrDefaultAsync(r => r.Id == id);
 
-            var receita = await _context.Receitas.FindAsync(id);
-            if (receita == null) return NotFound();
+            if (receita == null)
+                return NotFound();
 
-            CarregarProdutos();
-            return View(receita);
+            var model = new ReceitaEditViewModel
+            {
+                Id = receita.Id,
+                Titulo = receita.Titulo,
+                Descricao = receita.Descricao,
+
+                Produtos = receita.ReceitaProdutos
+                    .Select(x => new ReceitaProdutoViewModel
+                    {
+                        ProdutoId = x.ProdutoId,
+                        NomeProduto = x.Produto.Nome,
+                        Quantidade = x.Quantidade,
+                        PorcentagemProduto = x.PorcentagemProduto,
+                        UnidadeMedida = x.UnidadeMedida
+                    }).ToList()
+            };
+
+            return View(model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, Receita receita)
+        public async Task<IActionResult> Edit(ReceitaEditViewModel model)
         {
-            if (id != receita.Id) return NotFound();
-
             if (!ModelState.IsValid)
+                return View(model);
+
+            var receita = await _context.Receitas
+                .Include(r => r.ReceitaProdutos)
+                .FirstOrDefaultAsync(r => r.Id == model.Id);
+
+            if (receita == null)
+                return NotFound();
+
+            receita.Titulo = model.Titulo;
+            receita.Descricao = model.Descricao;
+
+            _context.ReceitaProdutos.RemoveRange(receita.ReceitaProdutos);
+
+            receita.ReceitaProdutos.Clear();
+
+            foreach (var item in model.Produtos)
             {
-                CarregarProdutos();
-                return View(receita);
+                receita.ReceitaProdutos.Add(new ReceitaProduto
+                {
+                    ProdutoId = item.ProdutoId,
+                    Quantidade = item.Quantidade,
+                    PorcentagemProduto = item.PorcentagemProduto,
+                    UnidadeMedida = item.UnidadeMedida
+                });
             }
 
-            try
-            {
-                _context.Update(receita);
-                await _context.SaveChangesAsync();
-            }
-            catch (DbUpdateConcurrencyException)
-            {
-                if (!await _context.Receitas.AnyAsync(r => r.Id == id)) return NotFound();
-                throw;
-            }
+            await _context.SaveChangesAsync();
 
             return RedirectToAction(nameof(Index));
         }

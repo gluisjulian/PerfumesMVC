@@ -1,0 +1,59 @@
+﻿@model PerfumesMVC.ViewModels.Receita.ReceitaEditViewModel;
+
+<h2>Editar Receita</h2>
+
+<form asp-action="Edit">
+    <input asp-for="Id" type="hidden" />
+    <div class="mb-3">
+        <label asp-for="Titulo"></label>
+        <input asp-for="Titulo" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Descricao"></label>
+        <textarea asp-for="Descricao"
+                  class="form-control"
+                  rows="3">
+        </textarea>
+    </div>
+    <hr />
+
+    <h4>Produtos</h4>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Unidade</th>
+                <th>%</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Produtos.Count; i++)
+            {
+                <tr>
+                    <td>
+                        @Model.Produtos[i].NomeProduto
+                        <input asp-for="Produtos[i].ProdutoId"
+                               type="hidden" />
+                        <input asp-for="Produtos[i].NomeProduto"
+                               type="hidden" />
+                    </td>
+                    <td>
+                        <input asp-for="Produtos[i].Quantidade"
+                               class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Produtos[i].UnidadeMedida"
+                               class="form-control" />
+                    </td>
+                    <td>
+                        <input asp-for="Produtos[i].PorcentagemProduto"
+                               class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button class="btn btn-success"> Salvar </button>
+    <a asp-action="Index" class="btn btn-secondary">Voltar</a>
+</form>
