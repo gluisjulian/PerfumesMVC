@@ -1,0 +1,70 @@
+﻿@model PerfumesMVC.ViewModels.Receita.ReceitaCreateViewModel
+
+
+<h2>Nova Receita</h2>
+
+<form asp-action="Create">
+    <div class="mb-3">
+        <label>Título</label>
+        <input asp-for="Titulo"
+               class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label>Descrição</label>
+        <textarea asp-for="Descricao"
+                  class="form-control"></textarea>
+    </div>
+    <hr />
+
+    <h4>Produtos da Receita</h4>
+
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Produto</th>
+                <th>Quantidade</th>
+                <th>Unidade</th>
+                <th>%</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < Model.Produtos.Count; i++)
+            {
+                <tr>
+                    <td>
+                        <input asp-for="Produtos[i].Selecionado"
+                               class="form-check-input" />
+                    </td>
+                    <td>
+                        @Model.Produtos[i].NomeProduto
+                        <input type="hidden"
+                               asp-for="Produtos[i].ProdutoId" />
+                        
+                               <input type="hidden"
+                               asp-for="Produtos[i].NomeProduto" />
+                    </td>
+
+
+                    <td>
+                        <input asp-for="Produtos[i].Quantidade"
+                               class="form-control" />
+                    </td>
+
+                    <td>
+                        <input asp-for="Produtos[i].UnidadeMedida"
+                               class="form-control" />
+                    </td>
+
+
+                    <td>
+                        <input asp-for="Produtos[i].PorcentagemProduto"
+                               class="form-control" />
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-success"> Salvar Receita </button>
+    <a asp-action="Index" class="btn btn-secondary"> Cancelar </a>
+</form>

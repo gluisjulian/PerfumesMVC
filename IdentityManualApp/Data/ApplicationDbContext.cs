@@ -30,20 +30,21 @@ namespace IdentityManualApp.Data
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            builder.Entity<ReceitaProduto>().HasKey(rp => new { rp.ReceitaId, rp.ProdutoId });
+            builder.Entity<ReceitaProduto>()
+                .HasKey(rp => new { rp.ReceitaId, rp.ProdutoId });
 
-            builder.Entity<ReceitaProduto>(rp =>
-            {
+            builder.Entity<ReceitaProduto>(rp => { 
                 rp.HasOne(rp => rp.Receita)
-                .WithMany(rp => rp.ReceitaProdutos)
-                .HasForeignKey(rp => rp.ReceitaId);
+                .WithMany(r => r.ReceitaProdutos)
+                .HasForeignKey(r => r.ReceitaId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
 
-            builder.Entity<ReceitaProduto>(rp => 
-            {
+            builder.Entity<ReceitaProduto>(rp => {
                 rp.HasOne(rp => rp.Produto)
-                .WithMany(rp => rp.ReceitaProdutos)
-                .HasForeignKey(rp => rp.ProdutoId);
+                .WithMany(r => r.ReceitaProdutos)
+                .HasForeignKey(r => r.ProdutoId)
+                .OnDelete(DeleteBehavior.Cascade);
             });
         }
     }

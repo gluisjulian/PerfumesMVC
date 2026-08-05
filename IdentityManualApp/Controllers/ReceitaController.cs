@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PerfumesMVC.Models;
+using PerfumesMVC.ViewModels.Receita;
 
 namespace PerfumesMVC.Controllers
 {
@@ -26,7 +27,6 @@ namespace PerfumesMVC.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             var receitas = await _context.Receitas
                 .AsNoTracking()
                 .Include(p => p.ReceitaProdutos)
@@ -57,22 +57,52 @@ namespace PerfumesMVC.Controllers
 
         public IActionResult Create()
         {
-            return View();
+            var produtos = _context.Produtos
+            .OrderBy(x => x.Nome)
+            .Select(x => new ProdutoReceitaViewModel
+            {
+                ProdutoId = x.Id,
+                NomeProduto = x.Nome,
+                UnidadeMedida = x.UnidadeMedida
+            }).ToList();
+
+
+            var model = new ReceitaCreateViewModel
+            {
+                Produtos = produtos
+            };
+
+
+            return View(model);
         }
 
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create(Receita receita)
+        public async Task<IActionResult> Create(ReceitaCreateViewModel model)
         {
             if (!ModelState.IsValid)
-            {
-                CarregarProdutos();
-                return View(receita);
-            }
+                return View(model);
 
-            // Registra qual usuário logado cadastrou o produto.
-            receita.UsuarioId = _userManager.GetUserId(User);
+
+            var receita = new Receita
+            {
+                Titulo = model.Titulo,
+                Descricao = model.Descricao,
+                UsuarioId = _userManager.GetUserId(User)
+            };
+
+
+            foreach (var item in model.Produtos.Where(x => x.Selecionado))
+            {
+                receita.ReceitaProdutos.Add(new ReceitaProduto
+                {
+                    ProdutoId = item.ProdutoId,
+                    Quantidade = item.Quantidade,
+                    PorcentagemProduto = item.PorcentagemProduto,
+                    UnidadeMedida = item.UnidadeMedida
+                });
+            }
 
             _context.Add(receita);
             await _context.SaveChangesAsync();
@@ -139,7 +169,7 @@ namespace PerfumesMVC.Controllers
             var receita = await _context.Receitas.FindAsync(id);
             if (receita != null)
             {
-                _context.Produtos.Remove(receita);
+                _context.Receitas.Remove(receita);
                 await _context.SaveChangesAsync();
             }
 

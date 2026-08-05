@@ -13,6 +13,7 @@
             <ul class="navbar-links">
                 <li><a asp-controller="Fornecedor" asp-action="Index">Fornecedores</a></li>
                 <li><a asp-controller="Produto" asp-action="Index">Produtos</a></li>
+                <li><a asp-controller="Receita" asp-action="Index">Receitas</a></li>
             </ul>
             <ul class="navbar-account">
                 @if (User.Identity != null && User.Identity.IsAuthenticated)
