@@ -38,6 +38,21 @@ namespace IdentityManualApp.Models
 
         public Fornecedor? Fornecedor { get; set; }
 
+        [Display(Name = "Lote")]
+        [Required(ErrorMessage = "O Lote é obrigatório.")]
+        [StringLength(50)]
+        public string Lote { get; set; }
+
+
+        [Display(Name = "Data Fabricação")]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DataFabricacao { get; set; }
+
+        [Display(Name = "Data Validade")]
+        //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime DataValidade { get; set; }
+
+
         // Guarda o Id do usuário (Identity) que cadastrou o produto.
         public string? UsuarioId { get; set; }
     }

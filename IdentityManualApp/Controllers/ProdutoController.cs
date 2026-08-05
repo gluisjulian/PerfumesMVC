@@ -66,7 +66,7 @@ namespace IdentityManualApp.Controllers
         // POST: Produto/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Nome,Descricao,Preco,Quantidade,UnidadeMedida,FornecedorId")] Produto produto)
+        public async Task<IActionResult> Create(Produto produto)
         {
             if (!ModelState.IsValid)
             {
@@ -97,7 +97,7 @@ namespace IdentityManualApp.Controllers
         // POST: Produto/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Nome,Descricao,Preco,Quantidade,FornecedorId,UsuarioId")] Produto produto)
+        public async Task<IActionResult> Edit(int id, Produto produto)
         {
             if (id != produto.Id) return NotFound();
 
@@ -154,7 +154,7 @@ namespace IdentityManualApp.Controllers
         private void CarregarFornecedores(int? fornecedorSelecionadoId = null)
         {
             ViewBag.FornecedorId = new SelectList(
-                _context.Fornecedores.AsNoTracking().OrderBy(f => f.Nome),
+                _context.Fornecedores.AsNoTracking().OrderBy(f => f.Nome).Where(f => f.UsuarioId == ObterUsuario()),
                 "Id", "Nome", fornecedorSelecionadoId);
         }
     }
