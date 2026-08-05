@@ -1,3 +1,4 @@
+using PerfumesMVC.Models;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -55,5 +56,7 @@ namespace IdentityManualApp.Models
 
         // Guarda o Id do usuário (Identity) que cadastrou o produto.
         public string? UsuarioId { get; set; }
+
+        public ICollection<ReceitaProduto> ReceitaProdutos { get; set; } = new List<ReceitaProduto>();
     }
 }

@@ -1,6 +1,7 @@
 using IdentityManualApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using PerfumesMVC.Models;
 
 namespace IdentityManualApp.Data
 {
@@ -16,6 +17,8 @@ namespace IdentityManualApp.Data
 
         public DbSet<Fornecedor> Fornecedores { get; set; } = null!;
         public DbSet<Produto> Produtos { get; set; } = null!;
+        public DbSet<Receita> Receitas { get; set; } = null!;
+        public DbSet<ReceitaProduto> ReceitaProdutos { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -26,6 +29,22 @@ namespace IdentityManualApp.Data
                 .WithMany(f => f.Produtos)
                 .HasForeignKey(p => p.FornecedorId)
                 .OnDelete(DeleteBehavior.Restrict);
+
+            builder.Entity<ReceitaProduto>().HasKey(rp => new { rp.ReceitaId, rp.ProdutoId });
+
+            builder.Entity<ReceitaProduto>(rp =>
+            {
+                rp.HasOne(rp => rp.Receita)
+                .WithMany(rp => rp.ReceitaProdutos)
+                .HasForeignKey(rp => rp.ReceitaId);
+            });
+
+            builder.Entity<ReceitaProduto>(rp => 
+            {
+                rp.HasOne(rp => rp.Produto)
+                .WithMany(rp => rp.ReceitaProdutos)
+                .HasForeignKey(rp => rp.ProdutoId);
+            });
         }
     }
 }
