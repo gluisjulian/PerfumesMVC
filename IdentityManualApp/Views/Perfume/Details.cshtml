@@ -1,0 +1,21 @@
+﻿@model PerfumesMVC.Models.Perfume;
+@{
+    ViewData["Title"] = "Detalhes do perfume";
+}
+
+<h1>@Model.Nome</h1>
+
+<dl>
+    <dt>Descrição</dt>
+    <dd>@Model.Descricao</dd>
+    <dt>Imagem</dt>
+    <dd>
+        <img src="@Url.Action("Imagem", new { id = Model.Id })"
+             class="card-img-top"
+             style="height: 220px; object-fit: cover;"
+             alt="@Model.Nome" />
+    </dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn">Editar</a>
+<a asp-action="Index" class="btn" style="background:#6b7280">Voltar</a>

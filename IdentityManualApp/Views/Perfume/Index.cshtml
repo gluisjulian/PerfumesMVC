@@ -48,18 +48,9 @@ else
                         </p>
 
                         <div class="d-flex gap-2 mt-2">
-                            <a asp-action="Details" asp-route-id="@perfume.Id"
-                               class="btn btn-sm btn-outline-secondary flex-fill">
-                                <i class="bi bi-eye"></i> Detalhes
-                            </a>
-                            <a asp-action="Edit" asp-route-id="@perfume.Id"
-                               class="btn btn-sm btn-outline-primary">
-                                <i class="bi bi-pencil"></i>
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@perfume.Id"
-                               class="btn btn-sm btn-outline-danger">
-                                <i class="bi bi-trash"></i>
-                            </a>
+                            <a asp-action="Edit" asp-route-id="@perfume.Id">Editar</a>
+                            <a asp-action="Details" asp-route-id="@perfume.Id">Detalhes</a>
+                            <a asp-action="Delete" asp-route-id="@perfume.Id">Excluir</a>
                         </div>
                     </div>
                 </div>
