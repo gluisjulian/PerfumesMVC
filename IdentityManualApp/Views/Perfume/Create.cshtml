@@ -1,0 +1,17 @@
+﻿@model PerfumesMVC.ViewModels.Perfume.PerfumeViewModel;
+
+<form asp-action="Create" enctype="multipart/form-data" method="post">
+    <div class="mb-3">
+        <label asp-for="Nome" class="form-label"></label>
+        <input asp-for="Nome" class="form-control" />
+    </div>
+    <div class="mb-3">
+        <label asp-for="Descricao" class="form-label"></label>
+        <textarea asp-for="Descricao" class="form-control"></textarea>
+    </div>
+    <div class="mb-3">
+        <label asp-for="ImagemArquivo" class="form-label"></label>
+        <input asp-for="ImagemArquivo" type="file" class="form-control" accept="image/*" />
+    </div>
+    <button type="submit" class="btn btn-primary">Salvar</button>
+</form>

@@ -2,6 +2,7 @@ using IdentityManualApp.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using PerfumesMVC.Models;
+using System.Reflection.Emit;
 
 namespace IdentityManualApp.Data
 {
@@ -19,6 +20,7 @@ namespace IdentityManualApp.Data
         public DbSet<Produto> Produtos { get; set; } = null!;
         public DbSet<Receita> Receitas { get; set; } = null!;
         public DbSet<ReceitaProduto> ReceitaProdutos { get; set; } = null!;
+        public DbSet<Perfume> Perfumes { get; set; } = null!;
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -46,6 +48,10 @@ namespace IdentityManualApp.Data
                 .HasForeignKey(r => r.ProdutoId)
                 .OnDelete(DeleteBehavior.Cascade);
             });
+
+            builder.Entity<Perfume>()
+                .Property(p => p.ImagemDados)
+                .HasColumnType("varbinary(max)");
         }
     }
 }
