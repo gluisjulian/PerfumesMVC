@@ -3,6 +3,7 @@ using IdentityManualApp.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using PerfumesMVC.Models;
 using PerfumesMVC.ViewModels.Perfume;
@@ -38,6 +39,7 @@ namespace PerfumesMVC.Controllers
 
         public IActionResult Create()
         {
+            CarregarReceitas();
             return View();
         }
 
@@ -52,6 +54,7 @@ namespace PerfumesMVC.Controllers
             {
                 Nome = model.Nome,
                 Descricao = model.Descricao,
+                ReceitaId = model.ReceitaId,
                 UsuarioId = _userManager.GetUserId(User)
             };
 
@@ -179,6 +182,13 @@ namespace PerfumesMVC.Controllers
             }
 
             return RedirectToAction(nameof(Index));
+        }
+
+        private void CarregarReceitas(int? receitaSelecionadaId = null)
+        {
+            ViewBag.ReceitaId = new SelectList(
+                _context.Receitas.AsNoTracking().OrderBy(r => r.Titulo).Where(f => f.UsuarioId == ObterUsuario()),
+                "Id", "Titulo", receitaSelecionadaId);
         }
     }
 }

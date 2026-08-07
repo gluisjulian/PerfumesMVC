@@ -13,6 +13,6 @@
         public string UnidadeMedida { get; set; } = string.Empty;
 
         public bool Selecionado { get; set; }
-        public string UsuarioId { get; set; }
+        public string? UsuarioId { get; set; }
     }
 }

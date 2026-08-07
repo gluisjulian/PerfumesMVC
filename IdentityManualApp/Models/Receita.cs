@@ -18,5 +18,7 @@ namespace PerfumesMVC.Models
         public string UsuarioId { get; set; }
 
         public ICollection<ReceitaProduto> ReceitaProdutos { get; set; } = new List<ReceitaProduto>();
+
+        public ICollection<Perfume> Perfumes { get; set; } = new List<Perfume>();
     }
 }

@@ -9,11 +9,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IdentityManualApp.Migrations
+namespace PerfumesMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260805141824_Receita")]
-    partial class Receita
+    [Migration("20260807163415_Inicio")]
+    partial class Inicio
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -320,6 +320,47 @@ namespace IdentityManualApp.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("PerfumesMVC.Models.Perfume", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<byte[]>("ImagemDados")
+                        .HasColumnType("varbinary(max)");
+
+                    b.Property<string>("ImagemNome")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ImagemTipo")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Nome")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ReceitaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceitaId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Perfumes");
+                });
+
             modelBuilder.Entity("PerfumesMVC.Models.Receita", b =>
                 {
                     b.Property<int>("Id")
@@ -435,6 +476,25 @@ namespace IdentityManualApp.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("PerfumesMVC.Models.Perfume", b =>
+                {
+                    b.HasOne("PerfumesMVC.Models.Receita", "Receita")
+                        .WithMany("Perfumes")
+                        .HasForeignKey("ReceitaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.HasOne("IdentityManualApp.Models.ApplicationUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Receita");
+
+                    b.Navigation("Usuario");
+                });
+
             modelBuilder.Entity("PerfumesMVC.Models.ReceitaProduto", b =>
                 {
                     b.HasOne("IdentityManualApp.Models.Produto", "Produto")
@@ -466,6 +526,8 @@ namespace IdentityManualApp.Migrations
 
             modelBuilder.Entity("PerfumesMVC.Models.Receita", b =>
                 {
+                    b.Navigation("Perfumes");
+
                     b.Navigation("ReceitaProdutos");
                 });
 #pragma warning restore 612, 618

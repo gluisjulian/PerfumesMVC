@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace IdentityManualApp.Migrations
+namespace PerfumesMVC.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -342,11 +342,16 @@ namespace IdentityManualApp.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("ReceitaId")
+                        .HasColumnType("int");
+
                     b.Property<string>("UsuarioId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ReceitaId");
 
                     b.HasIndex("UsuarioId");
 
@@ -470,11 +475,19 @@ namespace IdentityManualApp.Migrations
 
             modelBuilder.Entity("PerfumesMVC.Models.Perfume", b =>
                 {
+                    b.HasOne("PerfumesMVC.Models.Receita", "Receita")
+                        .WithMany("Perfumes")
+                        .HasForeignKey("ReceitaId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("IdentityManualApp.Models.ApplicationUser", "Usuario")
                         .WithMany()
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Receita");
 
                     b.Navigation("Usuario");
                 });
@@ -510,6 +523,8 @@ namespace IdentityManualApp.Migrations
 
             modelBuilder.Entity("PerfumesMVC.Models.Receita", b =>
                 {
+                    b.Navigation("Perfumes");
+
                     b.Navigation("ReceitaProdutos");
                 });
 #pragma warning restore 612, 618

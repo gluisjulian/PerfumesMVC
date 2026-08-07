@@ -8,6 +8,9 @@ namespace PerfumesMVC.ViewModels.Perfume
         public string Nome { get; set; }
         public string Descricao { get; set; }
 
+        [Display(Name = "Receita")]
+        public int ReceitaId { get; set; }
+
         [Display(Name = "Imagem do Perfume")]
         public IFormFile? ImagemArquivo { get; set; }
     }

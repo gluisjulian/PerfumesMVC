@@ -17,5 +17,10 @@ namespace PerfumesMVC.Models
 
         public string UsuarioId { get; set; }
         public ApplicationUser Usuario { get; set; }
+
+
+        //RELACIONAMENTO RECEITA
+        public int ReceitaId { get; set; }
+        public Receita Receita { get; set; }
     }
 }

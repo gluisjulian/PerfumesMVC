@@ -52,6 +52,13 @@ namespace IdentityManualApp.Data
             builder.Entity<Perfume>()
                 .Property(p => p.ImagemDados)
                 .HasColumnType("varbinary(max)");
+
+            builder.Entity<Perfume>(p => {
+                p.HasOne(p => p.Receita)
+                .WithMany(r => r.Perfumes)
+                .HasForeignKey(p => p.ReceitaId)
+                .OnDelete(DeleteBehavior.Restrict);                
+            });
         }
     }
 }

@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace IdentityManualApp.Migrations
+namespace PerfumesMVC.Migrations
 {
     /// <inheritdoc />
-    public partial class Initial : Migration
+    public partial class Inicio : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -61,11 +61,28 @@ namespace IdentityManualApp.Migrations
                     Cnpj = table.Column<string>(type: "nvarchar(18)", maxLength: 18, nullable: false),
                     Telefone = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
                     Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Endereco = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                    Endereco = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Fornecedores", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Receitas",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Titulo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Receitas", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -183,8 +200,12 @@ namespace IdentityManualApp.Migrations
                     Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
                     Preco = table.Column<decimal>(type: "decimal(10,2)", nullable: false),
-                    Quantidade = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<decimal>(type: "decimal(10,3)", nullable: false),
+                    UnidadeMedida = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false),
                     FornecedorId = table.Column<int>(type: "int", nullable: false),
+                    Lote = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    DataFabricacao = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    DataValidade = table.Column<DateTime>(type: "datetime2", nullable: false),
                     UsuarioId = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -196,6 +217,64 @@ namespace IdentityManualApp.Migrations
                         principalTable: "Fornecedores",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Perfumes",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    ImagemDados = table.Column<byte[]>(type: "varbinary(max)", nullable: true),
+                    ImagemTipo = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ImagemNome = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    UsuarioId = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ReceitaId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Perfumes", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Perfumes_AspNetUsers_UsuarioId",
+                        column: x => x.UsuarioId,
+                        principalTable: "AspNetUsers",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Perfumes_Receitas_ReceitaId",
+                        column: x => x.ReceitaId,
+                        principalTable: "Receitas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ReceitaProdutos",
+                columns: table => new
+                {
+                    ProdutoId = table.Column<int>(type: "int", nullable: false),
+                    ReceitaId = table.Column<int>(type: "int", nullable: false),
+                    Quantidade = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    PorcentagemProduto = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    UnidadeMedida = table.Column<string>(type: "nvarchar(2)", maxLength: 2, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ReceitaProdutos", x => new { x.ReceitaId, x.ProdutoId });
+                    table.ForeignKey(
+                        name: "FK_ReceitaProdutos_Produtos_ProdutoId",
+                        column: x => x.ProdutoId,
+                        principalTable: "Produtos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReceitaProdutos_Receitas_ReceitaId",
+                        column: x => x.ReceitaId,
+                        principalTable: "Receitas",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
@@ -238,9 +317,24 @@ namespace IdentityManualApp.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Perfumes_ReceitaId",
+                table: "Perfumes",
+                column: "ReceitaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Perfumes_UsuarioId",
+                table: "Perfumes",
+                column: "UsuarioId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Produtos_FornecedorId",
                 table: "Produtos",
                 column: "FornecedorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReceitaProdutos_ProdutoId",
+                table: "ReceitaProdutos",
+                column: "ProdutoId");
         }
 
         /// <inheritdoc />
@@ -262,13 +356,22 @@ namespace IdentityManualApp.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Produtos");
+                name: "Perfumes");
+
+            migrationBuilder.DropTable(
+                name: "ReceitaProdutos");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
 
             migrationBuilder.DropTable(
                 name: "AspNetUsers");
+
+            migrationBuilder.DropTable(
+                name: "Produtos");
+
+            migrationBuilder.DropTable(
+                name: "Receitas");
 
             migrationBuilder.DropTable(
                 name: "Fornecedores");
