@@ -1,0 +1,180 @@
+﻿@* @model PerfumesMVC.ViewModels.Dashboard.DashboardViewModel
+@{
+    ViewData["Title"] = "Dahsboard";
+}
+
+<div>
+    <h1>Quantidade de Perfumes</h1>
+    <p>@Model.QtdePerfumes</p>
+</div>
+
+<div>
+    @foreach (var perfume in Model.Perfume)
+    {
+        <div class="card w-75">
+            <div class="card-body">
+                <h5 class="card-title">@perfume.Nome</h5>
+                <p class="card-text">@perfume.Descricao</p>
+                <img src="@Url.Action("Imagem", new { id = perfume.Id })"
+                     class="card-img-top"
+                     style="height: 220px; object-fit: cover;"
+                     alt="@perfume.Nome" />
+                <a asp-action="Details" asp-controller="Receita" asp-route-id="@perfume.Receita.Id">Detalhes</a>
+            </div>
+        </div>
+    }    
+</div> *@
+
+
+@model PerfumesMVC.ViewModels.Dashboard.DashboardViewModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="container-fluid">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h1 class="h3 mb-1">Dashboard</h1>
+            <p class="text-muted mb-0">
+                Visão geral dos seus perfumes
+            </p>
+        </div>
+    </div>
+
+
+    <!-- CARD QUANTIDADE DE PERFUMES -->
+
+    <div class="row mb-4">
+
+        <div class="col-md-4">
+
+            <div class="card shadow-sm border-0">
+
+                <div class="card-body">
+
+                    <div class="d-flex justify-content-between align-items-center">
+
+                        <div>
+                            <h6 class="text-muted mb-2">
+                                Total de Perfumes
+                            </h6>
+
+                            <h1 class="display-5 fw-bold">
+                                @Model.QtdePerfumes
+                            </h1>
+                        </div>
+
+                        <div>
+                            <span class="fs-1">
+                                🧴
+                            </span>
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <!-- LISTA DE PERFUMES -->
+
+    <div class="card shadow-sm border-0">
+
+        <div class="card-header bg-white">
+
+            <h5 class="mb-0">
+                Perfumes cadastrados
+            </h5>
+
+        </div>
+
+        <div class="card-body">
+
+            @if (Model.Perfume.Any())
+            {
+                <div class="table-responsive">
+
+                    <table class="table table-hover align-middle">
+
+                        <thead>
+                            <tr>
+                                <th>Nome</th>
+                                <th>Descrição</th>
+                                <th>Receita</th>
+                            </tr>
+                        </thead>
+
+                        <tbody>
+
+                            @foreach (var perfume in Model.Perfume)
+                            {
+                                <tr>
+
+                                    <td>
+                                        <strong>
+                                            @perfume.Nome
+                                        </strong>
+                                    </td>
+
+                                    <td>
+                                        @perfume.Descricao
+                                    </td>
+
+                                    <td>
+
+                                        @if (perfume.Receita != null)
+                                        {
+                                            @perfume.Receita.Titulo
+                                        }
+                                        else
+                                        {
+                                            <span class="text-muted">
+                                                Sem receita
+                                            </span>
+                                        }
+
+                                    </td>
+
+                                </tr>
+                            }
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+            }
+            else
+            {
+                <div class="text-center py-5">
+
+                    <div class="fs-1 mb-3">
+                        🧴
+                    </div>
+
+                    <h5>Nenhum perfume cadastrado</h5>
+
+                    <p class="text-muted">
+                        Cadastre seu primeiro perfume para começar.
+                    </p>
+
+                    <a asp-controller="Perfumes"
+                       asp-action="Create"
+                       class="btn btn-primary">
+                        Cadastrar perfume
+                    </a>
+
+                </div>
+            }
+
+        </div>
+
+    </div>
+
+</div>
